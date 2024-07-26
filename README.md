@@ -1,13 +1,16 @@
 # Reinforcement Learning Tutorial
 
-> with Python, Gynasium, and Pytorch
+> Minimal, clean and simple reinforcement learning tutorial with `gymnasium`, `numpy` and `torch`.
 
 ## Refer
 
 - [Gymnasium (Deep) Reinforcement Learning Tutorials](https://www.youtube.com/playlist?list=PL58zEckBH8fCt_lYkmayZoR9XfDCW9hte)
 - [Gymnasium](https://gymnasium.farama.org/)
+- the original code document of `gymnasium`
 
 ## FrozenLake
+
+> intro see `gymnasium.envs.toy_text.frozen_lake`
 
 You can already run the test code on pretrained Q table.
 
@@ -26,3 +29,16 @@ Or you can train the model by yourself.
 python .\code\FrozenLake\train_Qlearning.py
 python .\code\FrozenLake\train_Sarsa.py
 ```
+
+## MountainCar
+
+> intro see `gymnasium.envs.classic_control.mountain_car`
+
+```shell
+python .\code\MountainCar\test_Qlearning.py
+python .\code\MountainCar\test_Sarsa.py 
+```
+
+| Qlearning | Sarsa |
+| :-------: | :---: |
+| ![Qlearning](assets/images/mountaincar_Qlearning.gif) | ![Sarsa](assets/images/mountaincar_Sarsa.gif) |
