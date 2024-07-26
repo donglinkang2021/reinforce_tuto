@@ -42,3 +42,12 @@ python .\code\MountainCar\test_Sarsa.py
 | Qlearning | Sarsa |
 | :-------: | :---: |
 | ![Qlearning](assets/images/mountaincar_Qlearning.gif) | ![Sarsa](assets/images/mountaincar_Sarsa.gif) |
+
+## CartPole
+
+> intro see `gymnasium.envs.classic_control.cartpole`
+
+```shell
+python .\code\CartPole\test_Qlearning.py
+python .\code\CartPole\test_Sarsa.py 
+```
