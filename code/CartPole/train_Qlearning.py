@@ -33,22 +33,22 @@ agent = QLearning(
     gamma = gamma,
     lr = lr,
 )
-pbar = tqdm(
-    total=max_episodes,
-    desc='Training',
-    dynamic_ncols=True,
-)
 ep_rewards = []
-for epoch in range(max_episodes):
+epsilon = 1
+epsilon_decay = 1e-5
+
+i = 0
+while True:
     ep_reward = 0
     state, info = env.reset()
     state = get_state_id(state)
     while True:
-        action = agent.predict(state) 
+        if np.random.uniform(0, 1) > epsilon:
+            action = agent.predict(state) 
+        else:
+            action = env.action_space.sample()  
         next_state, reward, terminated, truncated, info = env.step(action)
         next_state = get_state_id(next_state)
-        if terminated:
-            reward = -1000
         agent.update(
             state = state, 
             action = action, 
@@ -58,12 +58,15 @@ for epoch in range(max_episodes):
         )
         state = next_state
         ep_reward += reward
-        if terminated or ep_reward > 10000:
+        if terminated or ep_reward > 2000:
             break
     ep_rewards.append(ep_reward)
-    pbar.set_postfix(Epoch=epoch, Reward=ep_reward)
-    pbar.update(1)
-pbar.close()
+    epsilon = max(epsilon - epsilon_decay, 0)
+    i += 1
+    if i % 200==0:
+        print(f'Episode: {i} Epsilon: {epsilon:0.2f}  Rewards: {ep_reward:0.1f}')
+    if ep_reward > 2000:
+        break
 env.close()
 agent.save_Q_table(f'{output_dir}/Q_table.json')
 plot_rewards_curve(ep_rewards, f'{output_dir}/rewards_curve.png')
