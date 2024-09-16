@@ -1,9 +1,9 @@
 import gymnasium as gym
 from utils import generate_random_map
 from config import *
-from agent import Sarsa 
+from reinforce.agents.QAgent import Sarsa
+from reinforce.utils.plot import plot_rewards
 from tqdm import tqdm
-from plot import plot_rewards_curve
 from pathlib import Path
 output_dir = 'output/frozenlake/Sarsa'
 Path(output_dir).mkdir(exist_ok=True, parents=True)
@@ -59,7 +59,7 @@ for epoch in range(max_episodes):
 pbar.close()
 env.close()
 agent.save_Q_table(f'{output_dir}/Q_table.json')
-plot_rewards_curve(ep_rewards, f'{output_dir}/rewards_curve.png')
+plot_rewards(ep_rewards, f'{output_dir}/rewards_curve.png')
 
 # test
 env = gym.make(

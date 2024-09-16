@@ -1,31 +1,32 @@
 import gymnasium as gym
 from utils import generate_random_map
 from config import *
-from agent import Sarsa 
-output_dir = 'output/frozenlake/Sarsa'
+
 map_desc = generate_random_map(
     size = map_size, 
     p = frozen_prob, 
     seed = map_seed
 )
+
+from astar import astar, path2table
+path = astar(map_desc, (0, 0), (map_size-1, map_size-1))
+assert path is not None, "No path found!"
+table = path2table(path)
+
 env = gym.make(
     id = id_name, 
     desc = map_desc,
     is_slippery = is_slippery, 
-    render_mode = 'human' # for interactive mode, testing
+    render_mode = 'human' # for non-interactive mode, training
 )
-agent = Sarsa(
-    state_dim = env.observation_space.n,
-    action_dim = env.action_space.n,
-    gamma = gamma,
-    lr = lr,
-)
-agent.load_Q_table(f'{output_dir}/Q_table.json')
+
 state, info = env.reset()
 while True:
-    action = agent.predict(state) 
+    action = table.get((state // map_size, state % map_size), 0)
     next_state, reward, terminated, truncated, info = env.step(action)
     state = next_state
     if terminated:
         break
 env.close()
+
+# python code/FrozenLake/naive.py

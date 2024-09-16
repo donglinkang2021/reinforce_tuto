@@ -5,7 +5,7 @@ from collections import defaultdict
 
 def greedy_epsilon(
         sample_count:int,
-        epsilon_start:float = 0.2,
+        epsilon_start:float = 1,
         epsilon_end:float = 0,
         epsilon_decay:int = 1000,
     ) -> float:

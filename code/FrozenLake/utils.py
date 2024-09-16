@@ -40,6 +40,9 @@ def generate_random_map(
 
     Returns:
         A random valid map
+
+    Note:
+        `S` start, `F` frozen, `H` hole, `G` goal
     """
     valid = False
     board = []  # initialize to make pyright happy
@@ -56,3 +59,5 @@ def generate_random_map(
 
 if __name__ == "__main__":
     print(generate_random_map())
+
+# python code/FrozenLake/utils.py

@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 from typing import List
 
-def plot_rewards_curve(ep_rewards: List[float], save_path:str) -> None:
+def plot_rewards(ep_rewards: List[float], save_path:str) -> None:
     plt.figure(figsize=(10, 5))
     plt.xlabel('episode')
     plt.ylabel('reward')
