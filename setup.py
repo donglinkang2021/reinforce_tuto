@@ -5,7 +5,7 @@ with open("README.md", "r", encoding='utf-8') as fh:
 
 setuptools.setup(
     name="reinforce",
-    version="0.0.0",
+    version="0.0.1",
     author="Dong Linkang",
     author_email="donglinkang2021@163.com",
     description="Record of my Reinforcement Learning",
