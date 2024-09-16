@@ -30,6 +30,7 @@ class QAgent(object):
         self.action_dim = action_dim 
         self.gamma = gamma
         self.lr = lr
+        self.epsilon = 1
         self.sample_count = 0 # epsilon greedy policy para
         self.Q_table  = defaultdict(lambda: np.zeros(action_dim)) 
 
@@ -39,6 +40,7 @@ class QAgent(object):
             Q_table[key] = value.tolist()     
         with open(path, 'w') as f:
             json.dump(Q_table, f)
+        print(f'Save Q_table to {path}')
 
     def load_Q_table(self, path:str) -> None:
         Q_table = {}
@@ -48,8 +50,9 @@ class QAgent(object):
             self.Q_table[key] = np.array(value)
 
     def choose_action(self, state:int) -> int:
-        self.sample_count += 1        
-        if np.random.uniform(0, 1) > greedy_epsilon(self.sample_count):
+        self.sample_count += 1    
+        self.epsilon = greedy_epsilon(self.sample_count)    
+        if np.random.uniform(0, 1) > self.epsilon:
             action = self.predict(state)    
         else:
             action = np.random.choice(self.action_dim)
