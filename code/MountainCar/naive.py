@@ -10,5 +10,8 @@ for _ in range(1000):
 
     if terminated or truncated:
         observation, info = env.reset()
+        print(f"terminated: {terminated}, truncated: {truncated}")
 
 env.close()
+
+# python code\MountainCar\naive.py

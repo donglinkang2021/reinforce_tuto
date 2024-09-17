@@ -41,13 +41,13 @@ def train(output_dir:str, agent:QAgent):
         pbar.update(1)
     pbar.close()
     env.close()
-    agent.save_Q_table(f'{output_dir}/Q_table.json')
+    agent.save(f'{output_dir}/Q_table.json')
     plot_rewards(ep_rewards, f'{output_dir}/rewards_curve.png')
 
 def test(output_dir:str, agent:QAgent):
     env = gym.make(id=id_name, render_mode="human")
     discretizer = Discretizer(env, num_parts)
-    agent.load_Q_table(f'{output_dir}/Q_table.json')
+    agent.load(f'{output_dir}/Q_table.json')
     state, info = env.reset()
     state = discretizer.state2id(state)
     while True:
@@ -65,10 +65,12 @@ if __name__ == '__main__':
 
     output_dir = f'output/mountaincar/{QClass.__name__}'
     Path(output_dir).mkdir(exist_ok=True, parents=True)    
+
+    from reinforce.utils.epsilon import Epsilon
+    epsilon = Epsilon()
     agent = QClass(
         state_dim = num_parts * num_parts,
-        # action_dim = env.action_space.n,
-        action_dim = 4,
+        action_dim = 3, epsilon = epsilon,
         gamma = gamma, lr = lr,
     )
 

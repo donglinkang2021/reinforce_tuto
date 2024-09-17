@@ -4,8 +4,13 @@ id_name = 'CartPole-v1'
 num_parts = 20
 
 # agent
-gamma = 0.99
-lr = 0.1
+gamma = 0.95
+lr = 0.01
 
 # train
-max_episodes = 2000
+max_episodes = 10000
+
+# epsilon
+start = 0.95
+end = 0.01
+decay = 1000

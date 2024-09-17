@@ -1,3 +1,5 @@
+## 1
+
 我在学习强化学习，我试图使用`QLearning` 来解决 `gymnasium`中的 `CartPole` 问题。我已经实现了一个 `QAgent` 类，它继承自 `QLearning` 类，我想训练这个 `QAgent` 类，然后测试它。
 
 但是我的效果不好，在训练过程中奖励一直上不去，因为`CartPole` 问题是连续状态空间，所以我在训练前对状态进行了离散化处理，我将状态空间分每个维度成了 `num_parts` 份，然后将每个状态映射到一个整数。我想知道我哪里出了问题，我应该如何提高效果？
@@ -85,3 +87,19 @@ if __name__ == '__main__':
 
 # python code/CartPole/run_QAgent.py
 ```
+
+## 2
+
+```python
+.\reinforce\
+├── __init__.py
+├── agents
+│   ├── QAgent.py
+│   └── __init__.py
+└── utils
+    ├── __init__.py
+    ├── discretize.py
+    └── plot.py
+```
+
+我写了一个库，我现在发现的问题是`QAgent`方法在我的`CartPole`问题上效果不好，现在我想添加`DQN`的方法，结合上面代码，请问我应该如何设计`DQN`类，以及如何训练和测试`DQN`类？

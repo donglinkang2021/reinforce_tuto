@@ -2,27 +2,14 @@ import math
 import numpy as np
 import json
 from collections import defaultdict
-
-def greedy_epsilon(
-        sample_count:int,
-        epsilon_start:float = 1,
-        epsilon_end:float = 0,
-        epsilon_decay:int = 1000,
-    ) -> float:
-    """
-    with the increase of sample_count, 
-    epsilon is decreasing from epsilon_start to epsilon_end
-    the policy is changing from random(exploration) to greedy(exploitation)
-    """
-    temperature = math.exp(-1. * sample_count / epsilon_decay) # 1.0 --> 0.0
-    epsilon = epsilon_end + (epsilon_start - epsilon_end) * temperature
-    return epsilon
+from reinforce.utils.epsilon import Epsilon
 
 class QAgent(object):
     def __init__(
             self, 
             state_dim:int, 
             action_dim:int, 
+            epsilon:Epsilon,
             gamma:float,
             lr:float
         ) -> None:
@@ -30,19 +17,17 @@ class QAgent(object):
         self.action_dim = action_dim 
         self.gamma = gamma
         self.lr = lr
-        self.epsilon = 1
-        self.sample_count = 0 # epsilon greedy policy para
+        self.epsilon = epsilon
         self.Q_table  = defaultdict(lambda: np.zeros(action_dim)) 
 
-    def save_Q_table(self, path:str) -> None:
+    def save(self, path:str) -> None:
         Q_table = {}
         for key, value in self.Q_table.items():
             Q_table[key] = value.tolist()     
         with open(path, 'w') as f:
             json.dump(Q_table, f)
-        print(f'Save Q_table to {path}')
 
-    def load_Q_table(self, path:str) -> None:
+    def load(self, path:str) -> None:
         Q_table = {}
         with open(path, 'r') as f:
             Q_table = json.load(f)
@@ -50,9 +35,7 @@ class QAgent(object):
             self.Q_table[key] = np.array(value)
 
     def choose_action(self, state:int) -> int:
-        self.sample_count += 1    
-        self.epsilon = greedy_epsilon(self.sample_count)    
-        if np.random.uniform(0, 1) > self.epsilon:
+        if np.random.uniform(0, 1) > self.epsilon.value:
             action = self.predict(state)    
         else:
             action = np.random.choice(self.action_dim)
@@ -74,8 +57,8 @@ class QAgent(object):
     
 
 class QLearning(QAgent):
-    def __init__(self, state_dim, action_dim, gamma, lr):
-        super(QLearning, self).__init__(state_dim, action_dim, gamma, lr)
+    def __init__(self, state_dim, action_dim, epsilon, gamma, lr):
+        super(QLearning, self).__init__(state_dim, action_dim, epsilon, gamma, lr)
     
     def update(self, state, action, reward, next_state, done):
         Q_now = self.Q_table[str(state)][action]
@@ -90,8 +73,8 @@ class QLearning(QAgent):
 
 
 class Sarsa(QAgent):
-    def __init__(self, state_dim, action_dim, gamma, lr):
-        super(Sarsa, self).__init__(state_dim, action_dim, gamma, lr)
+    def __init__(self, state_dim, action_dim, epsilon, gamma, lr):
+        super(Sarsa, self).__init__(state_dim, action_dim, epsilon, gamma, lr)
     
     def update(self, state, action, reward, next_state, done):
         Q_now = self.Q_table[str(state)][action]
